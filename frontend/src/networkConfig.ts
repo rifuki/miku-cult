@@ -19,17 +19,17 @@ export const { networkConfig, useNetworkVariable } = createNetworkConfig({
   testnet: {
     url: getFullnodeUrl("testnet"),
     variables: {
-      packageId: "0xNONE",
-      registryId: "0xNONE",
-      shrineId: "0xNONE",
+      packageId: DEVNET_PACKAGE_ID,
+      registryId: DEVNET_REGISTRY_ID,
+      shrineId: DEVNET_SHRINE_ID,
     },
   },
   mainnet: {
     url: getFullnodeUrl("mainnet"),
     variables: {
-      packageId: "0xNONE",
-      registryId: "0xNONE",
-      shrineId: "0xNONE",
+      packageId: DEVNET_PACKAGE_ID,
+      registryId: DEVNET_REGISTRY_ID,
+      shrineId: DEVNET_SHRINE_ID,
     },
   },
 });

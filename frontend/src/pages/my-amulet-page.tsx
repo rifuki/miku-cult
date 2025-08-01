@@ -3,14 +3,7 @@
 
 import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
 import { useNetworkVariable } from "@/networkConfig";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Sparkles, ShieldCheck, ExternalLink, Wallet } from "lucide-react";
 
@@ -39,24 +32,23 @@ export default function MyAmuletPage() {
   const fields = getFields(amulet);
   const display = amulet?.data?.display?.data;
 
-  // FIXED: Handle the "Not Connected" state first
+  // --- Loading and Error states remain the same ---
+
   if (!account) {
     return (
-      <Card className="w-full max-w-2xl bg-card/80 border-border text-center">
-        <CardHeader>
-          <div className="mx-auto bg-muted/50 rounded-full p-3 w-fit">
-            <Wallet className="h-10 w-10 text-muted-foreground" />
-          </div>
-          <CardTitle
-            style={{ fontFamily: "'Cinzel Decorative', serif" }}
-            className="mt-4"
-          >
-            Wallet Not Connected
-          </CardTitle>
-          <CardDescription>
-            Please connect your wallet to view your Amulet of Devotion.
-          </CardDescription>
-        </CardHeader>
+      <Card className="w-full max-w-md bg-card/80 border-border text-center p-8 mx-auto">
+        <div className="mx-auto bg-muted/50 rounded-full p-3 w-fit">
+          <Wallet className="h-10 w-10 text-muted-foreground" />
+        </div>
+        <CardTitle
+          style={{ fontFamily: "'Cinzel Decorative', serif" }}
+          className="mt-4"
+        >
+          Wallet Not Connected
+        </CardTitle>
+        <CardDescription>
+          Please connect your wallet to view your Amulet of Devotion.
+        </CardDescription>
       </Card>
     );
   }
@@ -71,80 +63,83 @@ export default function MyAmuletPage() {
 
   if (!amulet || !amulet.data || !fields) {
     return (
-      <Card className="w-full max-w-2xl bg-card/80 border-border text-center">
-        <CardHeader>
-          <CardTitle style={{ fontFamily: "'Cinzel Decorative', serif" }}>
-            Amulet Not Found
-          </CardTitle>
-          <CardDescription>
-            You do not possess a Devotion Amulet. Join an Order to receive one.
-          </CardDescription>
-        </CardHeader>
+      <Card className="w-full max-w-md bg-card/80 border-border text-center p-8 mx-auto">
+        <CardTitle style={{ fontFamily: "'Cinzel Decorative', serif" }}>
+          Amulet Not Found
+        </CardTitle>
+        <CardDescription>
+          You do not possess a Devotion Amulet. Join an Order to receive one.
+        </CardDescription>
       </Card>
     );
   }
 
+  // --- NEW EPIC REDESIGN STARTS HERE ---
+
   return (
-    // FIXED: Made the card larger and more prominent
-    <div className="w-full max-w-2xl p-2">
-      <Card className="w-full bg-card/80 border-border shadow-lg shadow-primary/10">
-        <CardHeader className="items-center text-center p-8">
-          <img
-            src={
-              display?.image_url?.replace("{rank}", fields.rank) ||
-              "/amulet-icon.png"
-            }
-            alt={display?.name || "Amulet"}
-            className="h-48 w-48 rounded-full border-4 border-primary/30 object-cover mb-4"
-          />
-          <CardTitle
-            style={{ fontFamily: "'Cinzel Decorative', serif" }}
-            className="text-3xl"
-          >
-            {display?.name?.replace("{rank}", fields.rank)}
-          </CardTitle>
-          <CardDescription
-            className="text-base"
-            style={{ fontFamily: "'Judson', serif" }}
-          >
-            {display?.description?.replace(
-              "{personal_faith}",
-              fields.personal_faith,
-            )}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4 px-8">
-          <div className="flex justify-between items-center p-4 bg-background/50 rounded-lg border border-border">
-            <div className="flex items-center gap-3">
-              <Sparkles className="h-5 w-5 text-yellow-400" /> Faith Points
-            </div>
-            <span className="font-bold text-xl text-yellow-400">
-              {fields.personal_faith}
-            </span>
+    <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-4 text-center animate-fade-in p-4 relative">
+      {/* Background Glow Effect */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-primary/10 rounded-full blur-3xl -z-10" />
+
+      {/* Amulet Image Display */}
+      <div className="mb-4">
+        <img
+          src={display?.image_url?.replace("{rank}", fields.rank)}
+          alt={display?.name || "Amulet"}
+          className="h-64 w-64 rounded-full border-4 border-primary/30 object-cover 
+                           drop-shadow-[0_0px_25px_rgba(0,255,255,0.2)]"
+        />
+      </div>
+
+      {/* Title and Description */}
+      <h1
+        style={{ fontFamily: "'Cinzel Decorative', serif" }}
+        className="text-4xl lg:text-5xl font-bold text-slate-100"
+      >
+        {display?.name?.replace("{rank}", fields.rank)}
+      </h1>
+      <p
+        className="text-lg text-muted-foreground max-w-md"
+        style={{ fontFamily: "'Judson', serif" }}
+      >
+        {display?.description?.replace(
+          "{personal_faith}",
+          fields.personal_faith,
+        )}
+      </p>
+
+      {/* Divider */}
+      <div className="h-px w-full max-w-sm bg-border my-6" />
+
+      {/* Stats Section */}
+      <div className="flex items-center justify-center gap-12 md:gap-20">
+        <div className="flex flex-col items-center">
+          <div className="flex items-center gap-2 text-sm text-yellow-400">
+            <Sparkles className="h-4 w-4" /> Faith Points
           </div>
-          <div className="flex justify-between items-center p-4 bg-background/50 rounded-lg border border-border">
-            {/* FIXED: Changed color from purple to primary (cyan/turquoise) */}
-            <div className="flex items-center gap-3">
-              <ShieldCheck className="h-5 w-5 text-primary" /> Rank
-            </div>
-            <span className="font-bold text-xl text-primary">
-              {fields.rank}
-            </span>
+          <p className="text-5xl font-bold text-slate-50">
+            {fields.personal_faith}
+          </p>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className="flex items-center gap-2 text-sm text-primary">
+            <ShieldCheck className="h-4 w-4" /> Rank
           </div>
-        </CardContent>
-        <CardFooter className="p-8">
-          <Button asChild variant="outline" className="w-full">
-            <a
-              href={`https://suiscan.xyz/devnet/object/${amulet.data.objectId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ExternalLink className="mr-2 h-4 w-4" />
-              View on Explorer
-            </a>
-          </Button>
-        </CardFooter>
-      </Card>
+          <p className="text-5xl font-bold text-slate-50">{fields.rank}</p>
+        </div>
+      </div>
+
+      {/* Action Button */}
+      <Button asChild variant="outline" className="mt-10">
+        <a
+          href={`https://suiscan.xyz/devnet/object/${amulet.data.objectId}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <ExternalLink className="mr-2 h-4 w-4" />
+          View on Explorer
+        </a>
+      </Button>
     </div>
   );
 }

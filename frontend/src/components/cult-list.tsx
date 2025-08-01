@@ -1,34 +1,30 @@
-// src/components/CultList.tsx
+// src/components/cult-list.tsx
 import { useSuiClient, useSignAndExecuteTransaction } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Users, LogIn } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Users, LogIn, CheckCircle } from "lucide-react";
 
 interface CultListProps {
   registryId: string;
   packageId: string;
+  hasAmulet: boolean;
+  currentUserShrineId?: string;
   refetch: () => void;
 }
 
-// Helper function
 function getFields(obj: any) {
-  if (obj?.data?.content?.dataType === "moveObject") {
+  if (obj?.data?.content?.dataType === "moveObject")
     return obj.data.content.fields;
-  }
   return null;
 }
 
 export default function CultList({
   registryId,
   packageId,
+  hasAmulet,
+  currentUserShrineId,
   refetch,
 }: CultListProps) {
   const suiClient = useSuiClient();
@@ -39,45 +35,36 @@ export default function CultList({
   useEffect(() => {
     if (!registryId) return;
     setIsLoading(true);
-
-    // FIXED: Two-step fetch process
-    // Step 1: Get the Registry object to find the Table ID
     suiClient
       .getObject({ id: registryId, options: { showContent: true } })
       .then((registryObject) => {
-        const registryFields = getFields(registryObject);
-        if (!registryFields) return;
-
-        const tableId = registryFields.cults.fields.id.id;
-
-        // Step 2: Get dynamic fields from the Table ID
+        const tableId = getFields(registryObject)?.cults.fields.id.id;
+        if (!tableId) {
+          setCults([]);
+          setIsLoading(false);
+          return;
+        }
         return suiClient.getDynamicFields({ parentId: tableId });
       })
       .then(async (dynamicFields) => {
-        if (!dynamicFields) {
+        if (!dynamicFields || dynamicFields.data.length === 0) {
           setCults([]);
           setIsLoading(false);
           return;
         }
-
         const cultIds = dynamicFields.data.map(
           (field) => field.name.value as string,
         );
-        if (cultIds.length === 0) {
-          setCults([]);
-          setIsLoading(false);
-          return;
-        }
-
         const cultObjects = await suiClient.multiGetObjects({
           ids: cultIds,
           options: { showContent: true },
         });
         setCults(cultObjects.filter((c) => c.data));
-        setIsLoading(false);
       })
       .catch((error) => {
         console.error("Failed to fetch cults:", error);
+      })
+      .finally(() => {
         setIsLoading(false);
       });
   }, [registryId, suiClient]);
@@ -91,55 +78,79 @@ export default function CultList({
     signAndExecute({ transaction: txb }, { onSuccess: () => refetch() });
   };
 
-  if (isLoading)
-    return (
-      <p className="text-muted-foreground animate-pulse text-center">
-        Summoning the Orders...
-      </p>
-    );
-
   return (
-    <div className="space-y-6 backdrop-blur-sm bg-card/50 p-8 rounded-lg border border-border">
+    <Card className="w-full bg-card/80 border-border p-6 shadow-lg">
       <h2
-        className="text-center text-2xl text-slate-300"
+        className="text-center text-3xl"
         style={{ fontFamily: "'Cinzel Decorative', serif" }}
       >
         Choose Your Order
       </h2>
-      {cults.length === 0 ? (
-        <p className="text-center text-muted-foreground">
-          No orders have been founded yet. Be the first.
+
+      {isLoading ? (
+        <p className="text-muted-foreground animate-pulse text-center py-8">
+          Summoning the Orders...
         </p>
+      ) : cults.length === 0 ? (
+        <div className="text-center text-muted-foreground py-8 min-h-[200px] flex items-center justify-center">
+          <p>
+            No orders have been founded yet. <br /> Be the first.
+          </p>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        // The grid now scales up to 4 columns on extra-large screens to prevent cards from being too large.
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {cults.map((cult) => {
             const fields = getFields(cult);
             if (!fields) return null;
+            const isCurrentMember = cult.data.objectId === currentUserShrineId;
+
             return (
               <Card
                 key={cult.data.objectId}
-                className="bg-background/50 border-border hover:border-primary/50 transition-colors"
+                className={`p-0 gap-0 bg-background/50 border-border flex flex-col overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 ${
+                  isCurrentMember ? "!border-primary" : ""
+                }`}
               >
-                <CardHeader>
-                  <CardTitle>{fields.name}</CardTitle>
-                  <CardDescription className="flex items-center gap-2">
+                <div className="relative w-full aspect-square bg-black">
+                  <img
+                    src={fields.image_url}
+                    alt={fields.name}
+                    className="absolute top-0 left-0 w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/unknown.jpg";
+                    }}
+                  />
+                </div>
+                <div className="p-4 flex flex-col flex-grow">
+                  <h3 className="font-bold text-lg">{fields.name}</h3>
+                  <p className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
                     <Users className="h-4 w-4" /> {fields.member_count}{" "}
                     Followers
-                  </CardDescription>
-                </CardHeader>
-                <CardFooter>
-                  <Button
-                    onClick={() => handleJoin(cult.data.objectId)}
-                    className="w-full"
-                  >
-                    <LogIn className="mr-2 h-4 w-4" /> Pledge Fealty
-                  </Button>
-                </CardFooter>
+                  </p>
+                  <div className="mt-auto pt-4">
+                    {isCurrentMember ? (
+                      <Button className="w-full" variant="outline" disabled>
+                        <CheckCircle className="mr-2 h-4 w-4 text-green-500" />
+                        Current Order
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => handleJoin(cult.data.objectId)}
+                        className="w-full"
+                        disabled={hasAmulet}
+                      >
+                        <LogIn className="mr-2 h-4 w-4" />
+                        {hasAmulet ? "Devotion is Singular" : "Pledge Fealty"}
+                      </Button>
+                    )}
+                  </div>
+                </div>
               </Card>
             );
           })}
         </div>
       )}
-    </div>
+    </Card>
   );
 }

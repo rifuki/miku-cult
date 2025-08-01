@@ -19,11 +19,7 @@ export default function DashboardPage() {
   const account = useCurrentAccount();
   const packageId = useNetworkVariable("packageId");
 
-  const {
-    data: amuletData,
-    isLoading,
-    refetch,
-  } = useSuiClientQuery(
+  const { data: amuletData, refetch } = useSuiClientQuery(
     "getOwnedObjects",
     {
       owner: account?.address!,
@@ -59,15 +55,6 @@ export default function DashboardPage() {
     );
   }
 
-  if (isLoading) {
-    return (
-      <p className="text-muted-foreground animate-pulse text-center">
-        Reading the digital omens...
-      </p>
-    );
-  }
-
-  // FIXED: The component now fills the container it's in
   if (amulet) {
     return (
       <PlayerDashboard

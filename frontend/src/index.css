@@ -44,9 +44,9 @@
 }
 
 :root {
-  --background: oklch(0.12 0.02 260); /* Deep, dark blue/purple */
+  --background: oklch(0.12 0.02 260);
   --foreground: oklch(0.92 0.01 260);
-  --card: oklch(0.15 0.03 260 / 60%); /* Semi-transparent card */
+  --card: oklch(0.15 0.03 260 / 60%);
   --card-foreground: oklch(0.95 0.01 260);
   --popover: oklch(0.1 0.02 260);
   --popover-foreground: oklch(0.95 0.01 260);
