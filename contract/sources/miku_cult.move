@@ -2,7 +2,7 @@ module 0x0::miku_cult;
 
 // === Imports ===
 use std::string::{String, utf8};
-use sui::{display, package};
+use sui::{display, package, table::{Self, Table}};
 
 // === Error Codes ===
 const E_NOT_ENOUGH_FAITH: u64 = 1;
@@ -12,6 +12,12 @@ const E_NOT_THE_FOUNDER: u64 = 2;
 public struct MIKU_CULT has drop {}
 
 // === Object Structs ===
+
+public struct CultRegistry has key {
+    id: UID,
+    // A table where Key is the Shrine ID and Value is the Shrine Name
+    cults: Table<ID, String>
+}
 // A shared object representing a cult that players can join.
 public struct CultShrine has key {
     id: UID,
@@ -35,6 +41,12 @@ public struct DevotionAmulet has key {
 
 // === Init Function ===
 fun init(otw: MIKU_CULT, ctx: &mut TxContext) {
+    let registry = CultRegistry {
+        id: object::new(ctx),
+        cults: table::new(ctx)
+    };
+    transfer::share_object(registry);
+
     let publisher = package::claim(otw, ctx);
     let mut display = display::new<DevotionAmulet>(&publisher, ctx);
     display.add(utf8(b"name"), utf8(b"Amulet of Devotion"));
@@ -64,22 +76,27 @@ public fun update_display_image(
 // ===================================================================
 // ===           Founder Functions                         ===
 // ===================================================================
-public fun create_cult(name: String, ctx: &mut TxContext) {
+public fun create_cult(
+    registry: &mut CultRegistry, 
+    name: String, 
+    ctx: &mut TxContext
+) {
     let shrine = CultShrine {
         id: object::new(ctx),
         name: name,
         // The founder is the first member
         member_count: 1
     };
-
     let shrine_id = object::uid_to_inner(&shrine.id);
 
+    registry.cults.add(shrine_id, shrine.name);
+
+    // Grant FounderCap and Amulet to the creator
     let founder_cap = CultFounderCap {
         id: object::new(ctx),
         shrine_id,
     };
     transfer::transfer(founder_cap, ctx.sender());
-
     let amulet = DevotionAmulet {
         id: object::new(ctx),
         shrine_id,
