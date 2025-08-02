@@ -1,35 +1,19 @@
+// src/networkConfig.ts
 import { createNetworkConfig } from "@mysten/dapp-kit";
 import { getFullnodeUrl } from "@mysten/sui/client";
-
-import {
-  DEVNET_PACKAGE_ID,
-  DEVNET_REGISTRY_ID,
-  DEVNET_SHRINE_ID,
-} from "@/config/constants";
+import { DEVNET_IDS, TESTNET_IDS, MAINNET_IDS } from "@/config/constants";
 
 export const { networkConfig, useNetworkVariable } = createNetworkConfig({
   devnet: {
     url: getFullnodeUrl("devnet"),
-    variables: {
-      packageId: DEVNET_PACKAGE_ID,
-      registryId: DEVNET_REGISTRY_ID,
-      shrineId: DEVNET_SHRINE_ID,
-    },
+    variables: DEVNET_IDS, // Use the devnet variables object
   },
   testnet: {
     url: getFullnodeUrl("testnet"),
-    variables: {
-      packageId: DEVNET_PACKAGE_ID,
-      registryId: DEVNET_REGISTRY_ID,
-      shrineId: DEVNET_SHRINE_ID,
-    },
+    variables: TESTNET_IDS, // Use the testnet variables object
   },
   mainnet: {
     url: getFullnodeUrl("mainnet"),
-    variables: {
-      packageId: DEVNET_PACKAGE_ID,
-      registryId: DEVNET_REGISTRY_ID,
-      shrineId: DEVNET_SHRINE_ID,
-    },
+    variables: MAINNET_IDS, // Use the mainnet variables object
   },
 });

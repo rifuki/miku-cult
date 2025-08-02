@@ -124,7 +124,7 @@ export default function CultList({
             return (
               <Card
                 key={cult.data.objectId}
-                className={`bg-background/50 border-border flex flex-col overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 ${
+                className={`p-0 gap-0 bg-background/50 border-border flex flex-col overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 ${
                   isCurrentMember ? "!border-primary" : ""
                 }`}
               >

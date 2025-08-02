@@ -1,45 +1,89 @@
-const network = (import.meta.env.VITE_NETWORK ?? "devnet") as
-  | "devnet"
-  | "testnet"
-  | "mainnet";
+// src/config/constants.ts
 
-function pick<T>(dev: T, test: T, main: T): T {
-  switch (network) {
-    case "devnet":
-      return dev;
-    case "testnet":
-      return test;
-    case "mainnet":
-      return main;
-    default:
-      return dev;
-  }
-}
+// 1. Baca network yang aktif dari .env. Defaultnya adalah 'devnet'.
+const activeNetwork = import.meta.env.VITE_NETWORK || "devnet";
 
-function assertEnv(name: string, val: string): string {
-  if (!val || val === "0x0") {
-    throw new Error(`Missing or placeholder env var: ${name}`);
+// 2. Buat fungsi assertEnv yang lebih pintar.
+// Dia sekarang menerima parameter 'network' untuk tahu variabel siapa yang sedang divalidasi.
+function assertEnv(
+  name: string,
+  val: string | undefined,
+  network: "devnet" | "testnet" | "mainnet",
+): string {
+  console.log(`Checking ${name}:`, {
+    val,
+    network,
+    activeNetwork,
+    isOptional: network !== activeNetwork || network === "mainnet",
+  });
+
+  const isOptional = network !== activeNetwork || network === "mainnet";
+  if (!val || val === "0x0" || val === "") {
+    if (isOptional) {
+      return "0xPLACEHOLDER";
+    }
+    throw new Error(
+      `Missing required env var for active network '${activeNetwork}': ${name}`,
+    );
   }
   return val;
 }
 
-export const DEVNET_PACKAGE_ID = pick(
-  import.meta.env.VITE_DEVNET_PACKAGE_ID,
-  import.meta.env.VITE_TESTNET_PACKAGE_ID,
-  import.meta.env.VITE_MAINNET_PACKAGE_ID,
-);
-export const DEVNET_REGISTRY_ID = pick(
-  import.meta.env.VITE_DEVNET_REGISTRY_ID,
-  import.meta.env.VITE_TESTNET_REGISTRY_ID,
-  import.meta.env.VITE_MAINNET_REGISTRY_ID,
-);
-export const DEVNET_SHRINE_ID = pick(
-  import.meta.env.VITE_DEVNET_SHRINE_ID,
-  import.meta.env.VITE_TESTNET_SHRINE_ID,
-  import.meta.env.VITE_MAINNET_SHRINE_ID,
-);
+// 3. Panggil assertEnv dengan konteks network yang benar.
+export const DEVNET_IDS = {
+  packageId: assertEnv(
+    "VITE_DEVNET_PACKAGE_ID",
+    import.meta.env.VITE_DEVNET_PACKAGE_ID,
+    "devnet", // Konteks: ini variabel devnet
+  ),
+  registryId: assertEnv(
+    "VITE_DEVNET_REGISTRY_ID",
+    import.meta.env.VITE_DEVNET_REGISTRY_ID,
+    "devnet",
+  ),
+  shrineId: assertEnv(
+    "VITE_DEVNET_SHRINE_ID",
+    import.meta.env.VITE_DEVNET_SHRINE_ID,
+    "devnet",
+  ),
+};
 
-// Validate early
-assertEnv("PACKAGE_ID", DEVNET_PACKAGE_ID);
-assertEnv("REGISTRY_ID", DEVNET_REGISTRY_ID);
-assertEnv("SHRINE_ID", DEVNET_SHRINE_ID);
+export const TESTNET_IDS = {
+  packageId: assertEnv(
+    "VITE_TESTNET_PACKAGE_ID",
+    import.meta.env.VITE_TESTNET_PACKAGE_ID,
+    "testnet", // Konteks: ini variabel testnet
+  ),
+  registryId: assertEnv(
+    "VITE_TESTNET_REGISTRY_ID",
+    import.meta.env.VITE_TESTNET_REGISTRY_ID,
+    "testnet",
+  ),
+  shrineId: assertEnv(
+    "VITE_TESTNET_SHRINE_ID",
+    import.meta.env.VITE_TESTNET_SHRINE_ID,
+    "testnet",
+  ),
+};
+
+export const MAINNET_IDS = {
+  packageId: assertEnv(
+    "VITE_MAINNET_PACKAGE_ID",
+    import.meta.env.VITE_MAINNET_PACKAGE_ID,
+    "mainnet", // Konteks: ini variabel mainnet
+  ),
+  registryId: assertEnv(
+    "VITE_MAINNET_REGISTRY_ID",
+    import.meta.env.VITE_MAINNET_REGISTRY_ID,
+    "mainnet",
+  ),
+  shrineId: assertEnv(
+    "VITE_MAINNET_SHRINE_ID",
+    import.meta.env.VITE_MAINNET_SHRINE_ID,
+    "mainnet",
+  ),
+};
+console.log("Active Network:", import.meta.env.VITE_NETWORK);
+console.log("Testnet Package ID:", import.meta.env.VITE_TESTNET_PACKAGE_ID);
+console.log("Testnet Regsitry ID:", import.meta.env.VITE_TESTNET_REGISTRY_ID);
+console.log("Testnet Shrine ID:", import.meta.env.VITE_TESTNET_SHRINE_ID);

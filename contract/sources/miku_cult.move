@@ -61,7 +61,7 @@ fun init(otw: MIKU_CULT, ctx: &mut TxContext) {
     display.add(utf8(b"description"), utf8(b"A proof of loyalty to the Miku Order"));
     display.add(utf8(b"faith_points"), utf8(b"{personal_faith}"));
     display.add(utf8(b"rank"), utf8(b"{rank}"));
-    display.add(utf8(b"image_url"), utf8(b"https://blush-tragic-goat-277.mypinata.cloud/ipfs/bafybeifpw4rmvknsqekotzsu5rh3acz3ivokltvp4glsrfpdhi6mocbw54"));
+    display.add(utf8(b"image_url"), utf8(b"https://blush-tragic-goat-277.mypinata.cloud/ipfs/bafkreidxq35dgrt7ikghc2mogccomcluusu6ngxvleaxgxm32z2kj7aheq"));
     display.update_version();
 
     transfer::public_transfer(publisher, ctx.sender());
