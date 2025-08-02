@@ -54,7 +54,6 @@ export default function BrowseOrdersPage() {
         packageId={packageId}
         hasAmulet={hasAmulet}
         currentUserShrineId={currentUserShrineId}
-        refetch={refetchAll}
       />
 
       {/* Section 2: The action form or info card, placed below the list. */}

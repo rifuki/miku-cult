@@ -43,7 +43,6 @@ fun test_create_cult_success() {
         let founder_cap = scenario.take_from_sender<CultFounderCap>();
         let amulet = scenario.take_from_sender<DevotionAmulet>();
         
-        // Menggunakan getter functions dengan meaningful error codes
         assert!(founder_cap.get_founder_cap_shrine_id() == cult.get_shrine_id(), ETestFounderCapMismatch);
         assert!(amulet.get_amulet_shrine_id() == cult.get_shrine_id(), ETestAmuletMismatch);
         assert!(amulet.get_amulet_faith() == 0, ETestInitialFaith);

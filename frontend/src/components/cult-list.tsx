@@ -1,17 +1,16 @@
-// src/components/cult-list.tsx
 import { useSuiClient, useSignAndExecuteTransaction } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Users, LogIn, CheckCircle } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CultListProps {
   registryId: string;
   packageId: string;
   hasAmulet: boolean;
   currentUserShrineId?: string;
-  refetch: () => void;
 }
 
 function getFields(obj: any) {
@@ -25,10 +24,10 @@ export default function CultList({
   packageId,
   hasAmulet,
   currentUserShrineId,
-  refetch,
 }: CultListProps) {
   const suiClient = useSuiClient();
   const { mutate: signAndExecute } = useSignAndExecuteTransaction();
+  const queryClient = useQueryClient();
   const [cults, setCults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -75,13 +74,31 @@ export default function CultList({
       target: `${packageId}::miku_cult::join_cult`,
       arguments: [txb.object(shrineId)],
     });
-    signAndExecute({ transaction: txb }, { onSuccess: () => refetch() });
+
+    signAndExecute(
+      { transaction: txb },
+      {
+        onSuccess: () => {
+          alert("Successfully joined the Order!");
+
+          // --- REVISED REFETCH LOGIC ---
+          // This is a more forceful way to ensure all data is refreshed.
+          // It tells React Query to invalidate and refetch EVERY active query.
+          // This guarantees that the sidebar, mobile nav, and the cult list
+          // will all get the new data immediately.
+          queryClient.invalidateQueries();
+        },
+        onError: (err) => {
+          alert(`Failed to join: ${err.message}`);
+        },
+      },
+    );
   };
 
   return (
     <Card className="w-full bg-card/80 border-border p-6 shadow-lg">
       <h2
-        className="text-center text-3xl"
+        className="text-center text-3xl mb-8"
         style={{ fontFamily: "'Cinzel Decorative', serif" }}
       >
         Choose Your Order
@@ -98,7 +115,6 @@ export default function CultList({
           </p>
         </div>
       ) : (
-        // The grid now scales up to 4 columns on extra-large screens to prevent cards from being too large.
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {cults.map((cult) => {
             const fields = getFields(cult);
@@ -108,7 +124,7 @@ export default function CultList({
             return (
               <Card
                 key={cult.data.objectId}
-                className={`p-0 gap-0 bg-background/50 border-border flex flex-col overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 ${
+                className={`bg-background/50 border-border flex flex-col overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 ${
                   isCurrentMember ? "!border-primary" : ""
                 }`}
               >
