@@ -1,10 +1,7 @@
-// src/pages/browse-orders-page.tsx
-"use client";
-
-import CultList from "@/components/cult-list";
-import CreateCultForm from "@/components/create-cult-form";
+import { Link } from "react-router-dom";
+import { CheckCircle, LayoutDashboard } from "lucide-react";
 import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
-import { useNetworkVariable } from "@/networkConfig";
+
 import {
   Card,
   CardContent,
@@ -13,8 +10,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { CheckCircle, LayoutDashboard } from "lucide-react";
+
+import CultList from "@/components/cult-list";
+import CreateCultForm from "@/components/create-cult-form";
+import { useNetworkVariable } from "@/networkConfig";
 
 function getFields(obj: any) {
   if (obj?.data?.content?.dataType === "moveObject")
@@ -46,9 +45,7 @@ export default function BrowseOrdersPage() {
   };
 
   return (
-    // The main container uses a single-column flow with no max-width to be consistent with the dashboard page.
     <div className="w-full flex flex-col gap-8 animate-fade-in">
-      {/* Section 1: The list of all available Orders. */}
       <CultList
         registryId={registryId}
         packageId={packageId}
@@ -56,7 +53,6 @@ export default function BrowseOrdersPage() {
         currentUserShrineId={currentUserShrineId}
       />
 
-      {/* Section 2: The action form or info card, placed below the list. */}
       {account && (
         <>
           {hasAmulet ? (

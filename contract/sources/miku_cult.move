@@ -20,7 +20,6 @@ public struct MIKU_CULT has drop {}
 
 public struct CultRegistry has key {
     id: UID,
-    // A table where Key is the Shrine ID and Value is the Shrine Name
     cults: Table<ID, String>
 }
 // A shared object representing a cult that players can join.

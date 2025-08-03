@@ -1,11 +1,5 @@
-// src/components/player-dashboard.tsx
-"use client";
-
-import { useSignAndExecuteTransaction, useSuiClient } from "@mysten/dapp-kit";
-import { Transaction } from "@mysten/sui/transactions";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+
 import {
   Sparkles,
   ShieldCheck,
@@ -15,8 +9,12 @@ import {
   FlaskConical,
   Gem,
 } from "lucide-react";
+import { useSignAndExecuteTransaction, useSuiClient } from "@mysten/dapp-kit";
+import { Transaction } from "@mysten/sui/transactions";
 
-// --- Helper functions and constants remain the same ---
+import { Button } from "@/components/ui/button";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+
 const ONE_DAY_MS = 86_400_000;
 
 function getFields(obj: any) {
@@ -46,7 +44,6 @@ export default function PlayerDashboard({
   packageId,
   refetch,
 }: PlayerDashboardProps) {
-  // --- All the hooks and logic remain the same ---
   const suiClient = useSuiClient();
   const { mutate: signAndExecute, isPending } = useSignAndExecuteTransaction();
   const [shrineInfo, setShrineInfo] = useState<any>(null);
@@ -101,7 +98,6 @@ export default function PlayerDashboard({
 
   const shrineFields = getFields(shrineInfo);
 
-  // --- FINAL BULLETPROOF JSX ---
   return (
     <div className="w-full flex flex-col gap-8 animate-fade-in">
       {/* Top Section: Symmetrical two-column grid for the main dashboard. */}

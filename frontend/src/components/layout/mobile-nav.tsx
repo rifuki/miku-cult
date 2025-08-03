@@ -1,7 +1,8 @@
-// src/components/layout/mobile-nav.tsx
-import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
-import { Gem, Home, Swords, Trophy, Wrench } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { Gem, Home, Swords, Trophy, Wrench } from "lucide-react";
+
+import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
+
 import { useNetworkVariable } from "@/networkConfig";
 
 const formatAddress = (addr: string) =>
@@ -22,8 +23,6 @@ export default function MobileNav({ onLinkClick }: MobileNavProps) {
   const account = useCurrentAccount();
   const packageId = useNetworkVariable("packageId");
 
-  // --- CHANGES START HERE ---
-
   // 1. Fetch DevotionAmulet data
   const { data: amuletData } = useSuiClientQuery(
     "getOwnedObjects",
@@ -40,8 +39,6 @@ export default function MobileNav({ onLinkClick }: MobileNavProps) {
   const display = amulet?.data?.display?.data;
   const hasAmulet = !!display?.image_url;
   const imageUrl = hasAmulet ? display.image_url : "/unknown.jpg";
-
-  // --- CHANGES END HERE ---
 
   const { data: founderCapData } = useSuiClientQuery(
     "getOwnedObjects",

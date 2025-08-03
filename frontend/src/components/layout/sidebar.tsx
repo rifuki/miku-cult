@@ -1,7 +1,8 @@
-// src/components/layout/sidebar.tsx
-import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
-import { Gem, Home, Swords, Trophy, Wrench } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { Gem, Home, Swords, Trophy, Wrench } from "lucide-react";
+
+import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
+
 import { useNetworkVariable } from "@/networkConfig";
 
 const formatAddress = (addr: string) =>
@@ -17,8 +18,6 @@ const navItems = [
 export default function Sidebar() {
   const account = useCurrentAccount();
   const packageId = useNetworkVariable("packageId");
-
-  // --- CHANGES START HERE ---
 
   // 1. Fetch DevotionAmulet data to get the profile picture
   const { data: amuletData } = useSuiClientQuery(
@@ -37,8 +36,6 @@ export default function Sidebar() {
   const display = amulet?.data?.display?.data;
   const hasAmulet = !!display?.image_url;
   const imageUrl = hasAmulet ? display.image_url : "/unknown.jpg";
-
-  // --- CHANGES END HERE ---
 
   // Fetch founder caps to conditionally show the "Manage" link
   const { data: founderCapData } = useSuiClientQuery(
@@ -123,7 +120,7 @@ export default function Sidebar() {
         </nav>
         <div className="mt-auto p-4 border-t border-border/50">
           <p className="text-xs text-center text-muted-foreground">
-            Miku Cult Simulator v3.0
+            Miku Cult Simulator v3.1
           </p>
         </div>
       </div>

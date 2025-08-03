@@ -1,5 +1,5 @@
-// src/components/layout/header.tsx
-"use client";
+import { useState } from "react";
+import { Menu } from "lucide-react";
 
 import {
   Sheet,
@@ -10,10 +10,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+
 import MobileNav from "./mobile-nav";
-import CustomConnectButton from "../wallet/custom-connect-button";
-import { useState } from "react";
+import CustomConnectButton from "@/components/wallet/custom-connect-button";
 
 export default function Header() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);

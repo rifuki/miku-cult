@@ -1,9 +1,7 @@
-// src/pages/dashboard-page.tsx
-"use client";
-
+import { Link } from "react-router-dom";
+import { Swords, Wallet } from "lucide-react";
 import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
-import { useNetworkVariable } from "@/networkConfig";
-import PlayerDashboard from "@/components/player-dashboard";
+
 import {
   Card,
   CardContent,
@@ -12,8 +10,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { Swords, Wallet } from "lucide-react";
+
+import { useNetworkVariable } from "@/networkConfig";
+import PlayerDashboard from "@/components/player-dashboard";
 
 export default function DashboardPage() {
   const account = useCurrentAccount();
@@ -31,7 +30,6 @@ export default function DashboardPage() {
 
   const amulet = amuletData?.data?.[0];
 
-  // FIXED: Handle "Not Connected" state clearly and beautifully
   if (!account) {
     return (
       <div className="w-full flex-grow flex items-center justify-center p-4">

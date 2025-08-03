@@ -1,8 +1,8 @@
-// src/pages/manage-orders-page.tsx
-"use client";
+import { useMemo } from "react";
+
+import { ShieldAlert, Users, Sparkles } from "lucide-react";
 
 import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
-import { useNetworkVariable } from "@/networkConfig";
 import {
   Card,
   CardHeader,
@@ -10,9 +10,9 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { ShieldAlert, Users, Sparkles } from "lucide-react";
+
+import { useNetworkVariable } from "@/networkConfig";
 import { EditCultDialog } from "@/components/edit-cult-dialog";
-import { useMemo } from "react"; // Import useMemo
 
 function getFields(obj: any) {
   if (obj?.data?.content?.dataType === "moveObject")
@@ -23,8 +23,6 @@ function getFields(obj: any) {
 export default function ManageOrdersPage() {
   const account = useCurrentAccount();
   const packageId = useNetworkVariable("packageId");
-
-  // --- FIXED DATA FETCHING LOGIC ---
 
   // Step 1: Fetch all Founder Caps the user owns. This part was correct.
   const {
@@ -163,7 +161,6 @@ export default function ManageOrdersPage() {
                     </div>
                   </div>
                 </div>
-                {/* We only render the Edit button if we have the shrine details */}
                 {shrineDetails && (
                   <EditCultDialog
                     founderCapId={cap.data.objectId}

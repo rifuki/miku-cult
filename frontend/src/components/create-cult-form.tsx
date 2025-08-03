@@ -1,7 +1,9 @@
-// src/components/create-cult-form.tsx
 import { useState } from "react";
+import { PlusCircle } from "lucide-react";
+
 import { useSignAndExecuteTransaction } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,7 +13,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { PlusCircle } from "lucide-react";
 
 interface CreateCultFormProps {
   registryId: string;
@@ -40,7 +41,7 @@ export default function CreateCultForm({
       arguments: [
         txb.object(registryId),
         txb.pure.string(name),
-        txb.pure.string(imageUrl), // Argument baru untuk URL gambar
+        txb.pure.string(imageUrl),
       ],
     });
     signAndExecute(
@@ -52,7 +53,7 @@ export default function CreateCultForm({
           );
           setName("");
           setImageUrl("");
-          refetch(); // Memuat ulang data untuk menampilkan perubahan
+          refetch();
         },
         onError: (error) => alert(`Failed to create Order: ${error.message}`),
       },

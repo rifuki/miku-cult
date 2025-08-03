@@ -1,8 +1,9 @@
-// src/components/founder-dashboard.tsx
-"use client";
-
 import { useEffect, useState } from "react";
+
+import { Link } from "react-router-dom";
+import { Wrench, Users } from "lucide-react";
 import { useSuiClient } from "@mysten/dapp-kit";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,8 +12,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Wrench, Users } from "lucide-react";
-import { Link } from "react-router-dom";
 
 interface FounderDashboardProps {
   founderCap: any;

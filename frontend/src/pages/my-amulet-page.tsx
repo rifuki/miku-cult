@@ -1,11 +1,10 @@
-// src/pages/my-amulet-page.tsx
-"use client";
-
-import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
-import { useNetworkVariable, networkConfig } from "@/networkConfig";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Sparkles, ShieldCheck, ExternalLink, Wallet } from "lucide-react";
+import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+
+import { useNetworkVariable, networkConfig } from "@/networkConfig";
 
 function getFields(obj: any) {
   if (obj?.data?.content?.dataType === "moveObject") {

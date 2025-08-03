@@ -1,10 +1,12 @@
-import { useSuiClient, useSignAndExecuteTransaction } from "@mysten/dapp-kit";
-import { Transaction } from "@mysten/sui/transactions";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+
 import { Users, LogIn, CheckCircle } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSuiClient, useSignAndExecuteTransaction } from "@mysten/dapp-kit";
+import { Transaction } from "@mysten/sui/transactions";
+
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 interface CultListProps {
   registryId: string;
@@ -80,12 +82,6 @@ export default function CultList({
       {
         onSuccess: () => {
           alert("Successfully joined the Order!");
-
-          // --- REVISED REFETCH LOGIC ---
-          // This is a more forceful way to ensure all data is refreshed.
-          // It tells React Query to invalidate and refetch EVERY active query.
-          // This guarantees that the sidebar, mobile nav, and the cult list
-          // will all get the new data immediately.
           queryClient.invalidateQueries();
         },
         onError: (err) => {

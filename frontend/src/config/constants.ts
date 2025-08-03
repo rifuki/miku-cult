@@ -1,10 +1,5 @@
-// src/config/constants.ts
-
-// 1. Baca network yang aktif dari .env. Defaultnya adalah 'devnet'.
 const activeNetwork = import.meta.env.VITE_NETWORK || "devnet";
 
-// 2. Buat fungsi assertEnv yang lebih pintar.
-// Dia sekarang menerima parameter 'network' untuk tahu variabel siapa yang sedang divalidasi.
 function assertEnv(
   name: string,
   val: string | undefined,
@@ -29,7 +24,6 @@ function assertEnv(
   return val;
 }
 
-// 3. Panggil assertEnv dengan konteks network yang benar.
 export const DEVNET_IDS = {
   packageId: assertEnv(
     "VITE_DEVNET_PACKAGE_ID",

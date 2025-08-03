@@ -1,8 +1,7 @@
-// src/components/JoinCult.tsx
-"use client";
-
+import { LogIn } from "lucide-react";
 import { useSignAndExecuteTransaction } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { LogIn } from "lucide-react";
 
 interface JoinCultProps {
   shrineId: string;

@@ -1,8 +1,16 @@
-// src/components/edit-cult-dialog.tsx
 import { useState, useCallback } from "react";
+
 import { useDropzone } from "react-dropzone";
 import { useSignAndExecuteTransaction } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
+import {
+  Edit,
+  UploadCloud,
+  Loader2,
+  CheckCircle,
+  AlertTriangle,
+} from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,15 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Edit,
-  UploadCloud,
-  Loader2,
-  CheckCircle,
-  AlertTriangle,
-} from "lucide-react";
 
-// Get the Pinata JWT from environment variables
 const PINATA_JWT = import.meta.env.VITE_PINATA_JWT;
 
 interface EditCultDialogProps {
@@ -57,7 +57,7 @@ export function EditCultDialog({
       const file = acceptedFiles[0];
       setImageFile(file);
       setPreview(URL.createObjectURL(file));
-      setUploadStatus("idle"); // Reset status if a new file is chosen
+      setUploadStatus("idle");
     }
   }, []);
 
@@ -114,7 +114,6 @@ export function EditCultDialog({
       hasChanges = true;
       txb.moveCall({
         target: `${packageId}::miku_cult::edit_cult_name`,
-        // FIXED: Changed txb.pure(name) to txb.pure.string(name)
         arguments: [
           txb.object(founderCapId),
           txb.object(shrineId),
@@ -127,7 +126,6 @@ export function EditCultDialog({
       hasChanges = true;
       txb.moveCall({
         target: `${packageId}::miku_cult::edit_cult_image`,
-        // FIXED: Changed txb.pure(finalImageUrl) to txb.pure.string(finalImageUrl)
         arguments: [
           txb.object(founderCapId),
           txb.object(shrineId),

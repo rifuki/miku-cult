@@ -1,9 +1,8 @@
-// src/pages/leaderboard-page.tsx
-"use client";
+import { useEffect, useState } from "react";
 
 import { useSuiClient } from "@mysten/dapp-kit";
-import { useNetworkVariable } from "@/networkConfig";
-import { useEffect, useState } from "react";
+import { Trophy, Users, Sparkles, ShieldX, Construction } from "lucide-react";
+
 import {
   Card,
   CardContent,
@@ -11,9 +10,11 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { Trophy, Users, Sparkles, ShieldX, Construction } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { cn } from "@/lib/utils";
+
+import { useNetworkVariable } from "@/networkConfig";
 
 // --- HELPER COMPONENTS & FUNCTIONS ---
 
@@ -57,8 +58,6 @@ function EmptyState({ message }: { message: string }) {
     </div>
   );
 }
-
-// --- LEADERBOARD COMPONENTS ---
 
 function TopOrders() {
   const suiClient = useSuiClient();
@@ -159,7 +158,6 @@ function TopOrders() {
   );
 }
 
-// FIXED: Reverted TopDevotees to a placeholder to remove errors.
 function TopDevotees() {
   // NOTE: A true on-chain leaderboard for all players is very complex and requires
   // a different smart contract design (e.g., a central registry for all amulets).
@@ -176,7 +174,6 @@ function TopDevotees() {
   );
 }
 
-// --- MAIN PAGE COMPONENT ---
 export default function LeaderboardPage() {
   return (
     <div className="w-full max-w-4xl mx-auto animate-fade-in">

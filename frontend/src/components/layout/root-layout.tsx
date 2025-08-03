@@ -1,9 +1,7 @@
-// src/components/layout/root-layout.tsx
-"use client";
-
 import { Outlet } from "react-router-dom";
-import Sidebar from "./sidebar";
+
 import Header from "./header";
+import Sidebar from "./sidebar";
 
 export default function RootLayout() {
   return (

@@ -9,7 +9,6 @@ const ADMIN: address = @0xDEAD;
 const USER_1: address = @0xFACE;
 const USER_2: address = @0xBEEF;
 
-// Test Error Codes - lebih meaningful daripada random numbers
 const ETestFounderCapMismatch: u64 = 100;
 const ETestAmuletMismatch: u64 = 101;
 const ETestFaithMismatch: u64 = 102;

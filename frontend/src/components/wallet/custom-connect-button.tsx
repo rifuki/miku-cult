@@ -1,12 +1,11 @@
-// src/components/ui/custom-connect-button.tsx
-"use client";
-
 import {
   useCurrentAccount,
   useCurrentWallet,
   useDisconnectWallet,
   ConnectModal,
 } from "@mysten/dapp-kit";
+import { Wallet, LogOut, ChevronDown } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,7 +13,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Wallet, LogOut, ChevronDown } from "lucide-react";
 
 const formatAddress = (addr: string) =>
   `${addr.slice(0, 6)}...${addr.slice(-4)}`;
@@ -70,7 +68,6 @@ export default function CustomConnectButton() {
           className="border-primary/50 text-primary hover:bg-primary/10"
         >
           <Wallet className="mr-2 h-4 w-4" />
-          {/* FIXED: Hide text on very small screens */}
           <span className="hidden sm:inline">Connect Wallet</span>
         </Button>
       }
